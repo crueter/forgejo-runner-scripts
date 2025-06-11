@@ -39,3 +39,4 @@ jq
 ccache
 zip
 unzip
+inetutils
