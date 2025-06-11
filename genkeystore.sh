@@ -46,6 +46,7 @@ do
 done
 
 read -n1 -p "Would you like to store your alias and password in the android directory? (NOT RECOMMENDED) [y/N] " confirm
+echo
 
 case "$confirm" in
     [yY])

@@ -31,7 +31,7 @@ if [ -d ssh ]; then
 	cp -r ssh/* ~/.ssh
 fi
 
-cp runner/* runner/.runner ~
+cp runner/* ~
 
 echo "Setting up runner"
 
@@ -40,53 +40,60 @@ if [ ! -f ~/.local/bin/runner ]; then
 	wget -nv -O ~/.local/bin/runner https://code.forgejo.org/forgejo/runner/releases/download/v${RUNNER_VERSION}/forgejo-runner-${RUNNER_VERSION}-linux-amd64
 fi
 
-chmod +x ~/.local/bin/runner
+cd ~
 
-if [ ! -f ~/config.yml ]; then
-	echo "No config found, using default"
-	echo "Please edit it to your needs."
-	sleep 3
+chmod +x .local/bin/runner
 
-	vim ~/config.yml
+if [ ! -f .runner ]; then
+    if [ ! -f config.yml ]; then
+        echo "No config found, using default"
+        echo "Please edit it to your needs."
+        sleep 3
+
+        vim config.yml
+    fi
+
+    echo "Base URL is $base_url"
+    while true
+    do
+        read -p "Enter the runner token: " runner_token
+
+        if [ "$runner_token" == "" ]; then
+            echo "Error: no token provided"
+            continue
+        fi
+
+        break
+    done
+
+    read -p "Enter your runner's name ($(hostname)): " runner_name
+
+    if [ "$runner_name" == "" ]; then
+        runner_name="$HOST"
+    fi
+
+    read -p "Enter comma-separated runner labels (linux,android): " runner_labels
+
+    if [ "$runner_labels" == "" ]; then
+        runner_labels="linux,android"
+    fi
+
+    echo "Registering runner on $base_url..."
+
+    runner register --instance "$base_url" --labels "$runner_labels" --name "$runner_name" --token "$runner_token" --no-interactive
+
+    echo "Successfully registered!"
 fi
 
-echo "Base URL is $base_url"
-while true
-do
-	read -p "Enter the runner token: " runner_token
+ping_url=$(sed 's|^https://||' <<< $base_url)
 
-	if [ "$runner_token" == "" ]; then
-		echo "Error: no token provided"
-		continue
-	fi
+sed -i "s/USER/$USER/g" runner.service
+sed -i "s|GIT-REPO|$ping_url|g" wait-online
 
-	break
-done
+chmod a+x wait-online
 
-read -p "Enter your runner's name ($(hostname)): " runner_name
-
-if [ "$runner_name" == "" ]; then
-	runner_name="$HOST"
-fi
-
-read -p "Enter comma-separated runner labels (linux,android): " runner_labels
-
-if [ "$runner_labels" == "" ]; then
-	runner_labels="linux,android"
-fi
-
-echo "Registering runner on $base_url..."
-
-runner register --instance "$base_url" --labels "$runner_labels" --name "$runner_name" --token "$runner_token" --no-interactive
-
-echo "Successfully registered!"
-
-sed -i "s/USER/$USER/g" ~/runner.service
-sed -i "s|GIT-REPO|$base_url|g" ~/wait-online
-
-sudo mv ~/runner.service /etc/systemd/system
-sudo mv ~/wait-online /usr/local/bin
-sudo chmod a+x /usr/local/bin/wait-online
+sudo mv runner.service /etc/systemd/system
+sudo mv wait-online /usr/local/bin
 
 echo "Starting and enabling runner"
 
