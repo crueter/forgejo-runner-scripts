@@ -1,0 +1,16 @@
+[Unit]
+Description=Forgejo Runner
+After=network-online.target
+Wants=network-online.target
+IgnoreOnIsolate=true
+
+[Service]
+ExecStartPre=/usr/local/bin/wait-online
+ExecStart=/home/USER/.local/bin/runner daemon -c /home/USER/config.yml
+WorkingDirectory=/home/USER
+User=USER
+Group=USER
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
