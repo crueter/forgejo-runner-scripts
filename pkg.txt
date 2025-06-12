@@ -40,3 +40,6 @@ ccache
 zip
 unzip
 inetutils
+npm
+ruby
+python-pip
