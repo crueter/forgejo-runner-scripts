@@ -12,6 +12,7 @@ fi
 
 export PATH="$JAVA_HOME/bin:$PATH"
 
+rm -rf "$SDK_DIR"
 mkdir -p "$SDK_DIR"
 
 echo "Downloading cmdline-tools"

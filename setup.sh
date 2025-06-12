@@ -35,10 +35,11 @@ cp runner/* ~
 
 echo "Setting up runner"
 
-export RUNNER_VERSION=$(curl -q -X 'GET' https://data.forgejo.org/api/v1/repos/forgejo/runner/releases/latest | jq .name -r | cut -c 2-)
 if [ ! -f ~/.local/bin/runner ]; then
+	export RUNNER_VERSION=$(curl -q -X 'GET' https://data.forgejo.org/api/v1/repos/forgejo/runner/releases/latest | jq .name -r | cut -c 2-)
 	wget -nv -O ~/.local/bin/runner https://code.forgejo.org/forgejo/runner/releases/download/v${RUNNER_VERSION}/forgejo-runner-${RUNNER_VERSION}-linux-amd64
 fi
+
 
 cd ~
 
@@ -50,6 +51,7 @@ if [ ! -f .runner ]; then
         echo "Please edit it to your needs."
         sleep 3
 
+	.local/bin/runner generate-config > config.yml
         vim config.yml
     fi
 
@@ -69,7 +71,7 @@ if [ ! -f .runner ]; then
     read -p "Enter your runner's name ($(hostname)): " runner_name
 
     if [ "$runner_name" == "" ]; then
-        runner_name="$HOST"
+	    runner_name="$(hostname)"
     fi
 
     read -p "Enter comma-separated runner labels (linux,android): " runner_labels
@@ -80,7 +82,7 @@ if [ ! -f .runner ]; then
 
     echo "Registering runner on $base_url..."
 
-    runner register --instance "$base_url" --labels "$runner_labels" --name "$runner_name" --token "$runner_token" --no-interactive
+    .local/bin/runner register --instance "$base_url" --labels "$runner_labels" --name "$runner_name" --token "$runner_token" --no-interactive
 
     echo "Successfully registered!"
 fi
