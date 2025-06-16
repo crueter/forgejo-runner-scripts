@@ -42,6 +42,7 @@ python-pip
 
 vulkan-intel
 vulkan-radeon
+vulkan-nouveau
 vulkan-icd-loader
 nvidia
 nvidia-utils
