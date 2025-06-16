@@ -6,12 +6,9 @@ aarch64-linux-gnu-linux-api-headers
 base-devel
 boost
 boost-libs
-cloudflared
 cmake
 fmt
 git
-htop
-less
 nasm
 neovim
 ninja
@@ -32,7 +29,7 @@ zsync
 jdk17-openjdk
 vulkan-intel
 haskell-gnutls
-gcc13
+gcc14
 svt-av1
 clang
 jq
