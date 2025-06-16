@@ -27,7 +27,6 @@ zsh-history-substring-search
 zsh-syntax-highlighting
 zsync
 jdk17-openjdk
-vulkan-intel
 haskell-gnutls
 gcc14
 svt-av1
@@ -40,3 +39,9 @@ inetutils
 npm
 ruby
 python-pip
+
+vulkan-intel
+vulkan-radeon
+vulkan-icd-loader
+nvidia
+nvidia-utils
