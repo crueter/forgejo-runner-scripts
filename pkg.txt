@@ -39,6 +39,7 @@ inetutils
 npm
 ruby
 python-pip
+wireless_tools
 
 vulkan-intel
 vulkan-radeon
