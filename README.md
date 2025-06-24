@@ -6,7 +6,6 @@ This is currently only compatible with Arch Linux, but can be very easily adapte
 # Setup
 - The current `pkg.txt` contains all packages needed for building & AppImage packing on Eden and other Yuzu forks. Modify to your needs.
   * Remove the aarch64 packages if you do not wish to enable cross-compilation.
-  * `plasma-meta` is included to add proper Qt theming to the application.
 
 ## Optional
 - Copy any necessary configuration directories into `config`
